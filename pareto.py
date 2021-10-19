@@ -1,61 +1,79 @@
+class Solution:
 
-
-class Pareto:
-    # constructor
-    def __init__(self, y1, y2):
-        self.y1 = y1
-        self.y2 = y2
-
-	# Metodo que verifica si u domina a v
-    def covers(u, v):
-        if u.y1 <= v.y1 and u.y2 <= v.y2:
-            if u.y1 < v.y1 or u.y2 < v.y2:
+    def __init__(self,solution,objective):
+        """
+            @params: solution: solucion actual del QAP
+                     obj: objeto que contiene los dos objetivos a Evaluar
+         """
+        self.solution=solution
+        self.obj=objective  #Se guarda el objeto que maneja la funciones de evaluacion
+    
+    def dominate(self,other_solution):
+        """Determina si una funcion domina a otra aplicando la formula de dominancia de soluciones """
+        
+        if( self.obj.objective_fun1(self.solution)>=self.obj.objective_fun1(other_solution)
+        and self.obj.objective_fun2(self.solution)>=self.obj.objective_fun2(other_solution)):
+            if( self.obj.objective_fun1(self.solution) > self.obj.objective_fun1(other_solution)
+                or self.obj.objective_fun2(self.solution) > self.obj.objective_fun2(other_solution)):
                 return True
         return False
-    # to string 
-    def __str__(self):
-        return "(" + str(self.y1) + "," + str(self.y2) + ")"
+
+    def constraint_check(self,P):
+        """Verifica las dos restricciones para una solucion """
+
+        if(self.is_valid() and not self.is_in_P(P) ):
+            return True
+        return False
+
+    def is_valid(self):
+        """ Verfica que la solucion Generada no contenga edificios repetidos en diferentes lugares """
+
+        if (len(set(self.solution))==len(self.solution)): return True
+        return False
+
+    def is_in_P(self,P):
+        """Funcion que verifica si una solucion ya forma parte de la Poblacion """
+        if(self.solution in [p.solution for p in P ]):
+            return True
+        
+        return False
 
 class ParetoSet:
-    # constructor
-    def __init__(self, paretoArray=[]):
-        self.paretos = paretoArray
 
-    # Metodo que retorna todas las soluciones no dominadas de una poblacion dada
-    def collect_non_dominated_solutions(population):
-        no_dominated_solutions = []
-        for u in population:
-            contador = 0
-            for v in population:
-                if Pareto.covers(u, v):
-                    contador += 1
-            if contador == 0:
-                no_dominated_solutions.append(u)
-        return no_dominated_solutions
+    def __init__(self,solutions=[]):
+        """@params: listas de soluciones que formaran parte del conjunto Pareto """
 
-    # Metodo que combina dos paretos set en uno
-    def combine_pareto_sets(pareto_set1, pareto_set2):
-        combined_pareto_set = pareto_set1+pareto_set2
-
-        return ParetoSet.collect_non_dominated_solutions(combined_pareto_set)
-
-    def __repr__(self):
-        return str([str(p) for p in self.paretos])
+        self.solutions=solutions
 
 
-if __name__ == "__main__":
-    a = Pareto(1, 3)
-    b = Pareto(2, 2)
-    c = Pareto(3,1)
-    d = Pareto(1,5)
-    population = [a, b, c]
-    population2 = [d]
-    x=ParetoSet.combine_pareto_sets(population, population2)
-    print('combined', ParetoSet(x))
-    print('population1', ParetoSet(population))
-    print('population2', ParetoSet(population2))
-    # print(a.covers(b))
-    # print(a.covers(a))
-    # print(b.covers(c))
+    def domintation_check(self,candidate):
+        """Determina si el candidato ya es dominado por una de las soluciones """
 
+        solution_to_delete=[] #Lista que soluciones que van a ser eliminadas del CP por ser dominada por el candidato
+        for solution in self.solutions:
+            if(solution.dominate(candidate.solution)):   
+                return 
+            else:
+                if(candidate.dominate(solution.solution)):
+                    solution_to_delete.append(solution)
+
+        self.remove_solutions_domidated(candidate,solution_to_delete)
+
+    def remove_solutions_domidated(self,newSolution,solutions_to_remove):
+        """Funcion que agrega una nueva colucion al conjunto pareto y elimina aquellas 
+            soluciones que son dominadas por la  nueva solucion
+         """
+        for solution in solutions_to_remove:
+            self.solutions.remove(solution) ##elimino las soluciones dominadas
+
+        self.solutions.append(newSolution) #agrego la nueva solucion
+                
+    def update(self,candidates):
+        """Lista de soluciones para actualizar el frente Pareto """
+        ##print('candidatos',candidates)
+        if not self.solutions:
+            self.solutions = [candidates[0]]
+            candidates = candidates[1:]
+        for candidate in candidates:
+            self.domintation_check(candidate)
 
