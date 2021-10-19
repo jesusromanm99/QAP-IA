@@ -1,0 +1,28 @@
+TSP:
+Archivos: tsp_KROAB100.TSP.TXT y tsp_kroac100.tsp.txt
+Formato:- Primera Linea, cantidad de ciudades
+ - Segunda Linea, cantidad de objetivos (=cantidad de matrices)
+ - matriz de adyacencia para el objetivo 1
+ - una línea en blanco
+ - matriz de adyacencia para el objetivo 2
+
+QAP: (para una buena visualización, usar wordpad o similar y sin ajuste de línea)
+Archivos: qapUni.75.0.1.qap.txt y qapUni.75.p75.1.qap.txt
+Formato:- Primera Linea, cantidad de localidades (= cantidad de edificios)
+ - matriz de adyacencia para el objetivo 1 (flujo 1 e/ edificios)
+ - una línea en blanco
+ - matriz de adyacencia para el objetivo 2 (flujo 2 e/ edificios)
+ - una línea en blanco
+ - matriz de adyacencia para las distancias (distancia e/ localidades)
+
+VRPTW:
+Archivos: vrptw_c101.txt y vrptw_rc101.txt
+Formato:- Se evidencia en el archivo mismo.
+ - Atender que son 101 customers (clientes) porque el "cliente 0" es desde donde partimos, es decir en realidad es el depósito.
+ - Está en forma de coordenadas, se sugiere que lo pasen a matriz de adyacencia, asuman que la distancia que calculan para cada par de clientes representa el tiempo que se tarda entre ese par de clientes.
+ - Para cada cliente se tiene también: 
+  * Su demanda (DEMAND)
+  * Inicio de ventana (READY TIME)
+  * Fin de ventana (DUE DATE)
+  * Tiempo de servicio en el cliente (SERVICE TIME)
+
