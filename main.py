@@ -21,7 +21,7 @@ for i in range(N):
         print('Solucion No valida')
 
 print('----------------------')
-PS.update(P)
+PS.merge(P)
 for i in range(len(P)):
     print(f'X{i}, su F1 es {ev.objective_fun1(P[i].solution)}, su F2 es {ev.objective_fun2(P[i].solution)}')
 

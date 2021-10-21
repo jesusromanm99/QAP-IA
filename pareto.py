@@ -2,12 +2,12 @@ class Solution:
 
     def __init__(self,solution,objective):
         """
-            @params: solution: solucion actual del QAP
+            @params: solution: solucion actual del QAP formato vector
                      obj: objeto que contiene los dos objetivos a Evaluar
          """
         self.solution=solution
         self.obj=objective  #Se guarda el objeto que maneja la funciones de evaluacion
-    
+        
     def dominate(self,other_solution):
         """Determina si una funcion domina a otra aplicando la formula de dominancia de soluciones """
         
@@ -46,7 +46,7 @@ class ParetoSet:
         self.solutions=solutions
 
 
-    def domintation_check(self,candidate):
+    def update(self,candidate):
         """Determina si el candidato ya es dominado por una de las soluciones """
 
         solution_to_delete=[] #Lista que soluciones que van a ser eliminadas del CP por ser dominada por el candidato
@@ -68,12 +68,12 @@ class ParetoSet:
 
         self.solutions.append(newSolution) #agrego la nueva solucion
                 
-    def update(self,candidates):
+    def merge(self,candidates):
         """Lista de soluciones para actualizar el frente Pareto """
         ##print('candidatos',candidates)
         if not self.solutions:
             self.solutions = [candidates[0]]
             candidates = candidates[1:]
         for candidate in candidates:
-            self.domintation_check(candidate)
+            self.update(candidate)
 
