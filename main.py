@@ -23,9 +23,12 @@ for i in range(N):
 print('----------------------')
 PS.update(P)
 for i in range(len(P)):
-    print(f'X{i}, su F1 es {ev.objective_fun1(P[i].solution)}, su F2 es {ev.objective_fun2(P[i].solution)}')
+    # print(f'X{i}, su F1 es {ev.objective_fun1(P[i].solution)}, su F2 es {ev.objective_fun2(P[i].solution)}')
+    [y1,y2]=P[i].get_eval_solution()
+    print(f'X{i}, su F1 es {y1}, su F2 es {y2}')
 
 print('Lista de soluciones')
 for ps in PS.solutions:
-    print(f'X{i}, su F1 es {ev.objective_fun1(ps.solution)}, su F2 es {ev.objective_fun2(ps.solution)}')
-
+    # print(f'X{i}, su F1 es {ev.objective_fun1(ps.solution)}, su F2 es {ev.objective_fun2(ps.solution)}')
+    [y1,y2]=ps.get_eval_solution()
+    print(f'X{i}, su F1 es {y1}, su F2 es {y2}')
