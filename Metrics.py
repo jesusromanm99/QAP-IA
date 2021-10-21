@@ -44,6 +44,27 @@ def max_dist(point, points):
             max_dist = dist
     return max_dist
 
+def included(list_points, point):
+    """
+    Checks if a point is included in a list of points. if so, returns True else False.
+    """
+    # print("list_points", list_points)
+    # print("point", point)
+    for p in list_points:
+        if p[0] == point[0] and p[1] == point[1]:
+            return True
+    return False
+
+def interset(list_points1, list_points2):
+    """
+    Calculates the intersection between two sets of points.
+    """
+    interset = []
+    for p in list_points1:
+        if included(list_points2, p):
+            interset.append(p)
+    return interset
+
 
 class Metrics:
     def m1(paretoOptimo,pareto):
@@ -80,6 +101,15 @@ class Metrics:
             sumatorio += max_dist(solution,solutions)
         return math.sqrt(sumatorio)
 
+    def m4(paretoOptimo, pareto):
+
+        # optimoSolutions = [[8,0],[7,1],[4,4],[1,7],[0,8]] 
+        # solutions = [[8,0],[7,1],[1,1]]
+        optimoSolutions = paretoOptimo.get_eval_solutions()
+        solutions = pareto.get_eval_solutions()
+        fnf = interset(optimoSolutions,solutions)
+        return 1 - (len(fnf)/len(solutions))
+
 ins1=Instance(QAP_INSTANCES[0]) ##creo  la Instancia
 ins1.reading_data() #Leo los datos del archivo
 ev=Evaluation(ins1) #Genero mis funciones objetivos para esa instancia
@@ -101,4 +131,4 @@ PS.update(P)
 print("Metrica m1: ", Metrics.m1(PS,PS))
 print("Metrica m2: ", Metrics.m2(PS,3))
 print("Metrica m3: ", Metrics.m3(PS))
-
+print("Metrica m4: ", Metrics.m4(PS,PS))
