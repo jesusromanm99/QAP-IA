@@ -84,3 +84,7 @@ class ParetoSet:
         for candidate in candidates:
             self.domintation_check(candidate)
 
+    def get_eval_solutions(self):
+        """Retorna las evaluaciones de las soluciones """
+        return [solution.get_eval_solution() for solution in self.solutions]
+
