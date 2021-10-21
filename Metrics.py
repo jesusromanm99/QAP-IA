@@ -22,26 +22,68 @@ def min_dist(point, points):
             min_dist = dist
     return min_dist
 
+def outRadius(list_points, point, radius):
+    """
+    Count the points in out of the radius of a point.
+    """
+    count = 0
+    for p in list_points:
+        dis = distance(p, point)
+        if dis > radius:
+            count += 1
+    return count
+
+def max_dist(point, points):
+    """
+    Calculates the maximum distance between a point and a set of points.
+    """
+    max_dist = 0
+    for p in points:
+        dist = distance(p, point)
+        if dist > max_dist:
+            max_dist = dist
+    return max_dist
+
+
 class Metrics:
-    def m1(self, paretoOptimo,pareto):
+    def m1(paretoOptimo,pareto):
         optimoSolutions = paretoOptimo.get_eval_solutions()
         solutions = pareto.get_eval_solutions()
-    # def m1(self, solution):
-        # optimoSolutions = [[0,1],[1,0],[1,1],[0,0]]
-        # solutions = [[2,3],[3,2],[3,3],[2,2]]
+    #     optimoSolutions = [[1,4],[2,2],[4,1],[6,0]]
+    #     solutions = [[2,6],[3,4],[5,3],[6,2]]
 
         sumatorio = 0
         for solution in solutions:
-            sumatorio = min_dist(solution,optimoSolutions)
+            sumatorio += min_dist(solution,optimoSolutions)
         return sumatorio/len(solutions)
 
+    def m2(pareto, sigma):
+    #     solutions = [[8,0],[7,1],[6,2],[5,3],[4,4],[3,5],[2,6],[1,7],[0,8]] # mejor distribucion
+    #     solutions = [[8,0],[7,1],[6,2],[5,3],[1,7],[0,8]]
+        try:
+            solutions = pareto.get_eval_solutions()
+            sumatorio = 0
+            for solution in solutions:
+                sumatorio += outRadius(solutions,solution,sigma)
+            res = sumatorio/(len(solutions)-1)
+            return res
+        except:
+            print("Error: Pareto set have a only solution, can't calculate m2")
+            exit()
+
+    def m3(pareto):
+        # solutions = [[8,0],[7,1],[6,2],[5,3],[4,4],[3,5],[2,6],[1,7],[0,8]] # mejor distribucion
+        # solutions = [[8,0],[7,1],[6,2],[5,3]] # peor distribucion
+        solutions = pareto.get_eval_solutions()
+        sumatorio = 0
+        for solution in solutions:
+            sumatorio += max_dist(solution,solutions)
+        return math.sqrt(sumatorio)
 
 ins1=Instance(QAP_INSTANCES[0]) ##creo  la Instancia
 ins1.reading_data() #Leo los datos del archivo
 ev=Evaluation(ins1) #Genero mis funciones objetivos para esa instancia
 PS=ParetoSet() #creo mi conjunto pareto
-
-#alternative= [[1,3,4,2],[1,3,4,2],[1,3,4,2]]
 
 P=[] #Poblacion
 N=3 #Tamaño de la poblacion
@@ -55,17 +97,8 @@ for i in range(N):
 
 print('----------------------')
 PS.update(P)
-for i in range(len(P)):
-    # print(f'X{i}, su F1 es {ev.objective_fun1(P[i].solution)}, su F2 es {ev.objective_fun2(P[i].solution)}')
-    [y1,y2]=P[i].get_eval_solution()
-    print(f'X{i}, su F1 es {y1}, su F2 es {y2}')
 
-print('Lista de soluciones')
-for ps in PS.solutions:
-    # print(f'X{i}, su F1 es {ev.objective_fun1(ps.solution)}, su F2 es {ev.objective_fun2(ps.solution)}')
-    [y1,y2]=ps.get_eval_solution()
-    print(f'X{i}, su F1 es {y1}, su F2 es {y2}')
+print("Metrica m1: ", Metrics.m1(PS,PS))
+print("Metrica m2: ", Metrics.m2(PS,3))
+print("Metrica m3: ", Metrics.m3(PS))
 
-m = Metrics()
-print(m.m1(PS,PS))
-# m.m1(PS)
