@@ -37,13 +37,20 @@ class Solution:
             return True
         
         return False
+    
+    def get_eval_solution(self):
+        """ Retorna la evaluacion de la solucion """
+        y1 = self.obj.objective_fun1(self.solution)
+        y2 = self.obj.objective_fun2(self.solution)
+        return [y1,y2]
 
 class ParetoSet:
 
-    def __init__(self,solutions=[]):
+    def __init__(self,solutions=[],evaluation=None):
         """@params: listas de soluciones que formaran parte del conjunto Pareto """
 
         self.solutions=solutions
+        self.evaluation=evaluation
 
 
     def update(self,candidate):
@@ -76,4 +83,8 @@ class ParetoSet:
             candidates = candidates[1:]
         for candidate in candidates:
             self.update(candidate)
+
+    def get_eval_solutions(self):
+        """Retorna las evaluaciones de las soluciones """
+        return [solution.get_eval_solution() for solution in self.solutions]
 
