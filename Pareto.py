@@ -11,6 +11,8 @@ class Solution:
     def dominate(self,other_solution):
         """Determina si una funcion domina a otra aplicando la formula de dominancia de soluciones """
         
+        # print(other_solution)
+        # print('-'*65)
         if( self.obj.objective_fun1(self.solution)<=self.obj.objective_fun1(other_solution)
         and self.obj.objective_fun2(self.solution)<=self.obj.objective_fun2(other_solution)):
             if( self.obj.objective_fun1(self.solution) < self.obj.objective_fun1(other_solution)
