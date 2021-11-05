@@ -110,25 +110,25 @@ class Metrics:
         fnf = interset(optimoSolutions,solutions)
         return 1 - (len(fnf)/len(solutions))
 
-ins1=Instance(QAP_INSTANCES[0]) ##creo  la Instancia
-ins1.reading_data() #Leo los datos del archivo
-ev=Evaluation(ins1) #Genero mis funciones objetivos para esa instancia
-PS=ParetoSet() #creo mi conjunto pareto
+# ins1=Instance(QAP_INSTANCES[0]) ##creo  la Instancia
+# ins1.reading_data() #Leo los datos del archivo
+# ev=Evaluation(ins1) #Genero mis funciones objetivos para esa instancia
+# PS=ParetoSet() #creo mi conjunto pareto
 
-P=[] #Poblacion
-N=3 #Tamaño de la poblacion
+# P=[] #Poblacion
+# N=3 #Tamaño de la poblacion
 
-for i in range(N):
-    solution=Solution(rd.sample(range(ins1.N), ins1.N),ev)
-    if(solution.constraint_check(P)):
-        P.append(solution)
-    else:
-        print('Solucion No valida')
+# for i in range(N):
+#     solution=Solution(rd.sample(range(ins1.N), ins1.N),ev)
+#     if(solution.constraint_check(P)):
+#         P.append(solution)
+#     else:
+#         print('Solucion No valida')
 
-print('----------------------')
-PS.update(P)
+# print('----------------------')
+# PS.update(P)
 
-print("Metrica m1: ", Metrics.m1(PS,PS))
-print("Metrica m2: ", Metrics.m2(PS,3))
-print("Metrica m3: ", Metrics.m3(PS))
-print("Metrica m4: ", Metrics.m4(PS,PS))
+# print("Metrica m1: ", Metrics.m1(PS,PS))
+# print("Metrica m2: ", Metrics.m2(PS,3))
+# print("Metrica m3: ", Metrics.m3(PS))
+# print("Metrica m4: ", Metrics.m4(PS,PS))
