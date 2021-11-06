@@ -29,19 +29,28 @@ class SPEA:
         """
         ps = ParetoSet()
         for i in range(num_generations):
+            print("Generation: ", i)
             # print(len(P),P[0])
+            if type(P)==[GaSolution]:
+                raise Exception("ParetoSet")
             ps.merge(P)
+            print('after merge')
             for s in ps.solutions:
                 if s in P:
                     P.remove(s)
+
+            print('after remove')
 
             #if len(ps.solutions) > self.max_pareto_points:
             #    self.reduce_pareto_set(ps)
             # print('ueoueoauaeouaeo')
             # print(len(P), P[0])
             self.fitness_assignment(ps, P)
+            print('after fitness')
             mating_pool = self.selection(P, ps)
+            print('after selection')
             P = self.next_generation(mating_pool, len(P),ev)
+            print('after next generation')
         return ps
 
     def fitness_assignment(self, pareto_set: ParetoSet, population: [GaSolution]):
@@ -110,9 +119,10 @@ class SPEA:
                 self.genetic_operators.mutation(ind)
                 ind.evaluation = ind.get_eval_solution()
 
+        # print(Q)
         return Q
 
-def test_qap(n = 5, inst_nro = 0):
+def test_qap(n = 5, ins_nro = 0):
     total_ind = 10
     total_generations = 10
     max_pareto_size = 20
@@ -120,7 +130,7 @@ def test_qap(n = 5, inst_nro = 0):
 
     pareto_set = ParetoSet()
 
-    instancia = QAP_INSTANCES[inst_nro]
+    instancia = QAP_INSTANCES[ins_nro]
 
     instancias = Instance(instancia)  # creo  la Instancia
     instancias.reading_data()  # Leo los datos del archivo
@@ -140,13 +150,18 @@ def test_qap(n = 5, inst_nro = 0):
             sol = [j for j in range(num_loc)]
             random.shuffle(sol)
             pop.append(GaSolution(sol, ev))
-        print("Iteracion: ", i+1,'para', instancia)
+        print("GA - Iteracion: ", i+1,'para', instancia)
         result = spea.run(pop, total_generations,ev)
+        print('after run', result, result.solutions)
         soluciones = [r for r in result.solutions]
 
+        print(soluciones)
         pareto_set.merge(soluciones)
 
     return pareto_set
 
 if __name__ == '__main__':
-    print(test_qap(n=5, inst_nro=0))
+    print()
+    result = test_qap(n=2, ins_nro=0)
+    print('-'*50)
+    print(result.solutions )

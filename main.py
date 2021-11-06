@@ -2,8 +2,11 @@
 # from Evaluation import Evaluation
 # from Pareto import Solution,ParetoSet
 # import random as rd
-from M3AS import testQap
-# from Metrics import m2
+from M3AS import testQap as m3as_test
+from spea import test_qap as spea_test
+from Pareto import ParetoSet
+import sys
+from Metrics import Metrics
 
 
 # ins1=Instance(QAP_INSTANCES[0]) ##creo  la Instancia
@@ -37,7 +40,37 @@ from M3AS import testQap
 #     print(f'X{i}, su F1 es {y1}, su F2 es {y2}')
 
 
+instance = int(sys.argv[1])
+pareto_true = ParetoSet()
+pareto_m3as = m3as_test(n=2, ins_nro=instance)
+print('*'*100, len(pareto_m3as.solutions))
+# pareto_true.merge(pareto_m3as.solutions)
+pareto_true.solutions = [i for i in pareto_m3as.solutions]
 
-result = testQap(n=5)
-print(result.solutions)
+pareto_spea = spea_test(n=2, ins_nro=instance)
 
+print('*'*100,'before merge')
+pareto_true.mergeParetoSet(pareto_spea)
+
+print('----------------------')
+print('Pareto M3AS')
+print(len(pareto_m3as.solutions))
+print('----------------------')
+print('Pareto SPEA')
+print(len(pareto_spea.solutions))
+print('----------------------')
+print('Pareto True')
+print(len(pareto_true.solutions))
+
+
+print('>>>>>>>>>>SPEA')
+print('Metrica m1:', Metrics.m1(pareto_true, pareto_spea))
+print('Metrica m2:', Metrics.m2(pareto_true, 1000))
+print('Metrica m3:', Metrics.m3(pareto_spea))
+print('Metrica m4:', Metrics.m4(pareto_true, pareto_spea))
+
+print('>>>>>>>>>M3AS')
+print('Metrica m1:', Metrics.m1(pareto_true, pareto_m3as))
+print('Metrica m2:', Metrics.m2(pareto_true, 1000))
+print('Metrica m3:', Metrics.m3(pareto_m3as))
+print('Metrica m4:', Metrics.m4(pareto_true, pareto_m3as))

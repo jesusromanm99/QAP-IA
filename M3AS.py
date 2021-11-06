@@ -121,7 +121,7 @@ def testQap(n=5, ins_nro=0):
     beta = 1
     rho = 0.02
     total_ants = 10
-    total_generations = 100
+    total_generations = 10
     # instancias = parse_qap()
 
     pareto_set = ParetoSet()
