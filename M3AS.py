@@ -115,36 +115,36 @@ class M3as():
             # self.update_feromone_matrix(sol)
 
 
-def testQap(n=5):
+def testQap(n=5, ins_nro=0):
     taumax = 0.0000053
     taumin = 0.000000053
     beta = 1
     rho = 0.02
     total_ants = 10
-    total_generations = 10
+    total_generations = 100
     # instancias = parse_qap()
 
     pareto_set = ParetoSet()
 
-    for instancia in [QAP_INSTANCES[0]]:
-        instancias = Instance(instancia)  # creo  la Instancia
-        instancias.reading_data()  # Leo los datos del archivo
-        flux1, flux2 = instancias.flux1, instancias.flux2
-        flux_mats = [flux1, flux2]
-        # print(flux_mats)
-        dist_mat = instancias.distance
-        # print('dist_mat', dist_mat)
+    instancia = QAP_INSTANCES[ins_nro]
+    instancias = Instance(instancia)  # creo  la Instancia
+    instancias.reading_data()  # Leo los datos del archivo
+    flux1, flux2 = instancias.flux1, instancias.flux2
+    flux_mats = [flux1, flux2]
+    # print(flux_mats)
+    dist_mat = instancias.distance
+    # print('dist_mat', dist_mat)
 
-        ev=Evaluation(instancias) #Genero mis funciones objetivos para esa instancia
+    ev=Evaluation(instancias) #Genero mis funciones objetivos para esa instancia
 
-        m3as = M3as(taumax, taumin, beta, rho, flux_mats,
-                    dist_mat, total_ants, total_generations, ev)
-        for i in range(n):
-            print("Iteracion: ", i,'para', instancia)
-            result = m3as.run()
-            soluciones = [r for r in result.solutions]
-            pareto_set.merge(soluciones)
+    m3as = M3as(taumax, taumin, beta, rho, flux_mats,
+                dist_mat, total_ants, total_generations, ev)
+    for i in range(n):
+        print("Iteracion: ", i+1,'para', instancia)
+        result = m3as.run()
+        soluciones = [r for r in result.solutions]
+        pareto_set.merge(soluciones)
     return pareto_set
 
-
-# testQap(n=2)
+if __name__ == '__main__':
+    pareto_set = testQap(n=2, ins_nro=0)

@@ -3,7 +3,7 @@
 # from Pareto import Solution,ParetoSet
 # import random as rd
 from M3AS import testQap
-from Metrics import m2
+# from Metrics import m2
 
 
 # ins1=Instance(QAP_INSTANCES[0]) ##creo  la Instancia
