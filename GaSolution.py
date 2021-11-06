@@ -1,5 +1,6 @@
 from Pareto import Solution
 import sys
+import random
 
 class GaSolution(Solution):
     """
@@ -18,7 +19,7 @@ class GaSolution(Solution):
 
 class GeneticOperators:
 
-    def crossover(self, sol_a, sol_b):
+    def crossover(self, sol_a, sol_b,ev):
         """
         Crossover de las soluciones dadas como parametros.
         Se toma el primer elemento de sol_a y se copia en el hijo. Luego se 
@@ -33,7 +34,7 @@ class GeneticOperators:
         @param sol_b: Segunda solucion
         @return: lista de hijos
         """    
-        child = [-1 for n in xrange(len(sol_a.solution))]
+        child = [-1 for n in range(len(sol_a.solution))]
         k = 0
         
         #fijar elementos de la primera solucion
@@ -48,7 +49,7 @@ class GeneticOperators:
             if child[i] < 0:
                 child[i] = s
         
-        return [GaSolution(child, sol_a.objectives)]
+        return [GaSolution(child, ev)]
     
     def mutation(self, sol):
         """

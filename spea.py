@@ -20,7 +20,7 @@ class SPEA:
         self.mutation_rate = mr
         self.max_pareto_points = max_pareto_points
 
-    def run(self, P, num_generations):
+    def run(self, P, num_generations,ev):
         """
         Ejecuta el algoritmo SPEA
         
@@ -41,7 +41,7 @@ class SPEA:
             # print(len(P), P[0])
             self.fitness_assignment(ps, P)
             mating_pool = self.selection(P, ps)
-            #P = self.next_generation(mating_pool, len(P))
+            P = self.next_generation(mating_pool, len(P),ev)
         return ps
 
     def fitness_assignment(self, pareto_set: ParetoSet, population: [GaSolution]):
@@ -83,9 +83,38 @@ class SPEA:
                 pool.append(c2)
         return pool
 
+    def next_generation(self, mating_pool, pop_size,ev):
+        """
+        Crea la siguiente generacion a partir del mating_pool y los operadores 
+        genéticos
+        
+        @param mating_pool: mating pool utilizada para construir la siguiente 
+                            generación de individuos
+        """
+        Q = []
+        
+        #cruzamiento
+        while len(Q) < pop_size:
+            parents = []
+            parents.append(random.choice(mating_pool))
+            other = random.choice(mating_pool)
+            parents.append(other)
+            if random.random() < 1:
+                children = self.genetic_operators.crossover(parents[0], parents[1],ev)
+                Q.extend(children)
+            else:
+                Q.extend(parents)
+        
+        for ind in Q:
+            if random.random() < self.mutation_rate:
+                self.genetic_operators.mutation(ind)
+                ind.evaluation = ind.get_eval_solution()
+
+        return Q
+
 def test_qap(n = 5, i = 0):
     total_ind = 10
-    total_generations = 100
+    total_generations = 10
     max_pareto_size = 20
     op = GeneticOperators()
 
@@ -111,7 +140,7 @@ def test_qap(n = 5, i = 0):
                 random.shuffle(sol)
                 pop.append(GaSolution(sol, ev))
             print("Iteracion: ", i,'para', instancia)
-            result = spea.run(pop, total_generations)
+            result = spea.run(pop, total_generations,ev)
             soluciones = [r for r in result.solutions]
 
             pareto_set.merge(soluciones)
