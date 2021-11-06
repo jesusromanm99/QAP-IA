@@ -112,7 +112,7 @@ class SPEA:
 
         return Q
 
-def test_qap(n = 5, i = 0):
+def test_qap(n = 5, inst_nro = 0):
     total_ind = 10
     total_generations = 10
     max_pareto_size = 20
@@ -120,32 +120,33 @@ def test_qap(n = 5, i = 0):
 
     pareto_set = ParetoSet()
 
-    for instancia in QAP_INSTANCES:
-        instancias = Instance(instancia)  # creo  la Instancia
-        instancias.reading_data()  # Leo los datos del archivo
-        flux1, flux2 = instancias.flux1, instancias.flux2
-        flux_mats = [flux1, flux2]
-        # print(flux_mats)
-        dist_mat = instancias.distance
-        # print('dist_mat', dist_mat)
-        objs = []
+    instancia = QAP_INSTANCES[inst_nro]
 
-        ev=Evaluation(instancias) #Genero mis funciones objetivos para esa instancia
-        spea = SPEA(len( dist_mat ), op, max_pareto_size)
-        num_loc = len(dist_mat)
-        for i in range(n):
-            pop = []
-            for _ in range(total_ind):
-                sol = [j for j in range(num_loc)]
-                random.shuffle(sol)
-                pop.append(GaSolution(sol, ev))
-            print("Iteracion: ", i,'para', instancia)
-            result = spea.run(pop, total_generations,ev)
-            soluciones = [r for r in result.solutions]
+    instancias = Instance(instancia)  # creo  la Instancia
+    instancias.reading_data()  # Leo los datos del archivo
+    flux1, flux2 = instancias.flux1, instancias.flux2
+    flux_mats = [flux1, flux2]
+    # print(flux_mats)
+    dist_mat = instancias.distance
+    # print('dist_mat', dist_mat)
+    objs = []
 
-            pareto_set.merge(soluciones)
+    ev=Evaluation(instancias) #Genero mis funciones objetivos para esa instancia
+    spea = SPEA(len( dist_mat ), op, max_pareto_size)
+    num_loc = len(dist_mat)
+    for i in range(n):
+        pop = []
+        for _ in range(total_ind):
+            sol = [j for j in range(num_loc)]
+            random.shuffle(sol)
+            pop.append(GaSolution(sol, ev))
+        print("Iteracion: ", i,'para', instancia)
+        result = spea.run(pop, total_generations,ev)
+        soluciones = [r for r in result.solutions]
 
+        pareto_set.merge(soluciones)
 
     return pareto_set
 
-test_qap(5, 0)
+if __name__ == '__main__':
+    print(test_qap(n=5, inst_nro=0))
