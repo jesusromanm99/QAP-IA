@@ -11,10 +11,12 @@ class Solution:
     def dominate(self,other_solution):
         """Determina si una funcion domina a otra aplicando la formula de dominancia de soluciones """
         
-        if( self.obj.objective_fun1(self.solution)>=self.obj.objective_fun1(other_solution)
-        and self.obj.objective_fun2(self.solution)>=self.obj.objective_fun2(other_solution)):
-            if( self.obj.objective_fun1(self.solution) > self.obj.objective_fun1(other_solution)
-                or self.obj.objective_fun2(self.solution) > self.obj.objective_fun2(other_solution)):
+        # print(other_solution)
+        # print('-'*65)
+        if( self.obj.objective_fun1(self.solution)<=self.obj.objective_fun1(other_solution)
+        and self.obj.objective_fun2(self.solution)<=self.obj.objective_fun2(other_solution)):
+            if( self.obj.objective_fun1(self.solution) < self.obj.objective_fun1(other_solution)
+                or self.obj.objective_fun2(self.solution) < self.obj.objective_fun2(other_solution)):
                 return True
         return False
 
@@ -77,11 +79,12 @@ class ParetoSet:
                 
     def merge(self,candidates):
         """Lista de soluciones para actualizar el frente Pareto """
-        ##print('candidatos',candidates)
+        # print('candidatos',candidates)
         if not self.solutions:
             self.solutions = [candidates[0]]
             candidates = candidates[1:]
         for candidate in candidates:
+            # print('candidato',candidate)
             self.update(candidate)
 
     def get_eval_solutions(self):
