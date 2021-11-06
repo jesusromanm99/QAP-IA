@@ -74,26 +74,24 @@ class ParetoSet:
         """Funcion que agrega una nueva colucion al conjunto pareto y elimina aquellas 
             soluciones que son dominadas por la  nueva solucion
          """
-        print('solutions_to_remove', len(
-            self.solutions), len(solutions_to_remove))
+         #print('solutions_to_remove', len(self.solutions), len(solutions_to_remove))
         for solution in solutions_to_remove:
             self.solutions.remove(solution)  # elimino las soluciones dominadas
 
         self.solutions.append(newSolution)  # agrego la nueva solucion
-        print('after solutions_to_remove', len(
-            self.solutions), len(solutions_to_remove))
+        #print('after solutions_to_remove', len( self.solutions), len(solutions_to_remove))
 
     def merge(self, candidates):
         """Lista de soluciones para actualizar el frente Pareto """
         # print('candidatos',candidates)
         i = 0
-        print(len(candidates))
+        #print(len(candidates))
         if not self.solutions:
             self.solutions = [candidates[0]]
             candidates = candidates[1:]
         for candidate in candidates:
             i += 1
-            print('merging', i, len(self.solutions), len(candidates))
+            #print('merging', i, len(self.solutions), len(candidates))
             # print('candidato',candidate)
             self.update(candidate)
 
@@ -101,14 +99,14 @@ class ParetoSet:
  # print('candidatos',candidates)
         i=0
         candidates = Pareto.solutions
-        print(len(candidates))
+        #print(len(candidates))
         if not self.solutions:
             self.solutions = [candidates[0]]
             candidates = candidates[1:]
         candidatos = [i for i in candidates]
         for candidate in candidatos:
             i+=1
-            print('merging', i, len(self.solutions), len(candidatos))
+            #print('merging', i, len(self.solutions), len(candidatos))
             # print('candidato',candidate)
             self.update(candidate)
     def get_eval_solutions(self):

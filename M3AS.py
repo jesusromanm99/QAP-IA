@@ -62,7 +62,7 @@ class M3as():
         self.rho = rho
         self.total_ants = total_ants
         self.total_generations = total_generations
-        self.pareto_set = ParetoSet()
+        self.pareto_set = ParetoSet([])
         self.visib_mats = []
         self.objectives = []
         self.max_values = []
@@ -121,10 +121,10 @@ def testQap(n=5, ins_nro=0):
     beta = 1
     rho = 0.02
     total_ants = 10
-    total_generations = 10
+    total_generations = 100
     # instancias = parse_qap()
 
-    pareto_set = ParetoSet()
+    pareto_set = ParetoSet([])
 
     instancia = QAP_INSTANCES[ins_nro]
     instancias = Instance(instancia)  # creo  la Instancia

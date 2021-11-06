@@ -67,15 +67,18 @@ def interset(list_points1, list_points2):
 
 
 class Metrics:
-    def m1(paretoOptimo,pareto):
+    def m1(pareto,paretoOptimo):
         optimoSolutions = paretoOptimo.get_eval_solutions()
         solutions = pareto.get_eval_solutions()
     #     optimoSolutions = [[1,4],[2,2],[4,1],[6,0]]
     #     solutions = [[2,6],[3,4],[5,3],[6,2]]
 
         sumatorio = 0
+        print('M1'*4,len(solutions))
         for solution in solutions:
             sumatorio += min_dist(solution,optimoSolutions)
+
+        print('Sumatorio'*4,sumatorio)
         return sumatorio/len(solutions)
 
     def m2(pareto, sigma):

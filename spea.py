@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from Pareto import Solution,ParetoSet
+from Pareto import ParetoSet
 from GaSolution import GaSolution, GeneticOperators
 from Instance import Instance, QAP_INSTANCES
-from Pareto import ParetoSet
-from Pareto import Solution
 from random import randint,random
 from Evaluation import Evaluation
 from Metrics import Metrics
@@ -13,7 +11,7 @@ import sys
 
 class SPEA:
     def __init__(self, num_objectives, genetic_operators, max_pareto_points, cr=1.0, mr=0.1):
-        pareto_set = ParetoSet(None)
+        pareto_set = ParetoSet([])
         self.num_objectives = num_objectives
         self.genetic_operators = genetic_operators
         self.crossover_rate = cr
@@ -27,30 +25,30 @@ class SPEA:
         @param P: la poblacion inicial
         @param num_generations: el numero maximo de generaciones
         """
-        ps = ParetoSet()
+        ps = ParetoSet([])
         for i in range(num_generations):
-            print("Generation: ", i)
+            #print("Generation: ", i)
             # print(len(P),P[0])
             if type(P)==[GaSolution]:
                 raise Exception("ParetoSet")
             ps.merge(P)
-            print('after merge')
+            #print('after merge')
             for s in ps.solutions:
                 if s in P:
                     P.remove(s)
 
-            print('after remove')
+            #print('after remove')
 
             #if len(ps.solutions) > self.max_pareto_points:
             #    self.reduce_pareto_set(ps)
             # print('ueoueoauaeouaeo')
             # print(len(P), P[0])
             self.fitness_assignment(ps, P)
-            print('after fitness')
+            #print('after fitness')
             mating_pool = self.selection(P, ps)
-            print('after selection')
+            #print('after selection')
             P = self.next_generation(mating_pool, len(P),ev)
-            print('after next generation')
+            #print('after next generation')
         return ps
 
     def fitness_assignment(self, pareto_set: ParetoSet, population: [GaSolution]):
@@ -124,11 +122,11 @@ class SPEA:
 
 def test_qap(n = 5, ins_nro = 0):
     total_ind = 10
-    total_generations = 10
+    total_generations = 100
     max_pareto_size = 20
     op = GeneticOperators()
 
-    pareto_set = ParetoSet()
+    pareto_set = ParetoSet([])
 
     instancia = QAP_INSTANCES[ins_nro]
 
@@ -150,12 +148,12 @@ def test_qap(n = 5, ins_nro = 0):
             sol = [j for j in range(num_loc)]
             random.shuffle(sol)
             pop.append(GaSolution(sol, ev))
-        print("GA - Iteracion: ", i+1,'para', instancia)
+        #print("GA - Iteracion: ", i+1,'para', instancia)
         result = spea.run(pop, total_generations,ev)
-        print('after run', result, result.solutions)
+        #print('after run', result, result.solutions)
         soluciones = [r for r in result.solutions]
 
-        print(soluciones)
+        #print(soluciones)
         pareto_set.merge(soluciones)
 
     return pareto_set
