@@ -120,7 +120,7 @@ def test_qap(n = 5, i = 0):
 
     pareto_set = ParetoSet()
 
-    for instancia in [QAP_INSTANCES[0]]:
+    for instancia in QAP_INSTANCES:
         instancias = Instance(instancia)  # creo  la Instancia
         instancias.reading_data()  # Leo los datos del archivo
         flux1, flux2 = instancias.flux1, instancias.flux2
