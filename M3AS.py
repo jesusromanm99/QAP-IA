@@ -103,18 +103,38 @@ class M3as():
 
     def run(self):
         for i in range(self.total_generations):
-            # print("Generation: ", i)
             for ant_number in range(self.total_ants):
                 ant = Ant(self.beta, ant_number, self.total_ants,
                           self.ferom_mat, self.visib_mats, self.objectives,self.ev)
 
                 sol = ant.build_solution()
-            # print(">>>>>>sol", sol)
-            self.pareto_set.update(sol)
+                self.pareto_set.update(sol)
+            self.evaporate_feromones()
+            self.update_feromone_matrix()
         return self.pareto_set
-            # self.update_feromone_matrix(sol)
 
+    def update_feromone_matrix(self):
+        for solution in self.pareto_set.solutions:
+            evaluation = solution.get_eval_solution()
+            divisor = sum([evaluation[i]/self.max_values[i] for i in range(len(evaluation))])
+            deltaTau = 1.0/divisor
+            self.taumax = deltaTau/(1.0 - self.rho)
+            self.taumin = self.taumax/(2 * self.total_ants)
+            for i in range(len(solution.solution)-1):
+                s = solution.solution[i]
+                d = solution.solution[i+1]
+                self.ferom_mat[s][d] = self.ferom_mat[s][d] + deltaTau
+                if self.ferom_mat[s][d] > self.taumax:
+                    self.ferom_mat[s][d] = self.taumax
 
+    def evaporate_feromones(self):
+        n = len(self.ferom_mat)
+        for i in range(n):
+            for j in range(n):
+                self.ferom_mat[i][j] = self.ferom_mat[i][j] * (1.0 - self.rho)
+                if self.ferom_mat[i][j] < self.taumin:
+                    self.ferom_mat[i][j] =  self.taumin
+					
 def testQap(n=5, ins_nro=0):
     taumax = 0.0000053
     taumin = 0.000000053
