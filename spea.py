@@ -148,7 +148,7 @@ def test_qap(n = 5, ins_nro = 0):
             sol = [j for j in range(num_loc)]
             random.shuffle(sol)
             pop.append(GaSolution(sol, ev))
-        #print("GA - Iteracion: ", i+1,'para', instancia)
+        print("GA - Iteracion: ", i+1,'para', instancia)
         result = spea.run(pop, total_generations,ev)
         #print('after run', result, result.solutions)
         soluciones = [r for r in result.solutions]

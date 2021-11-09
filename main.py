@@ -42,29 +42,51 @@ from Metrics import Metrics
 
 instance = int(sys.argv[1])
 pareto_true = ParetoSet([])
-pareto_m3as = m3as_test(n=5, ins_nro=instance)
 
-# pareto_true.merge(pareto_m3as.solutions)
-pareto_true.solutions = [i for i in pareto_m3as.solutions]
+pareto_m3as = m3as_test(n=5, ins_nro=instance)
+pareto_true.merge( [i for i in pareto_m3as.solutions])
 
 pareto_spea = spea_test(n=5, ins_nro=instance)
-
 pareto_true.merge([i for i in pareto_spea.solutions])
 
-print('>>>>>>>>>>LenSoluciones')
-print('ParetoTrue',len(pareto_true.solutions))
-print('M3AS',len(pareto_m3as.solutions))
-print('SPEA',len(pareto_spea.solutions))
+sm1 = 0
+sm2 = 0
+sm3 = 0
+sm4 = 0
+mm1 = 0
+mm2 = 0
+mm3 = 0
+mm4 = 0
+for i in range(5):
 
+    pareto_m3as = m3as_test(n=1, ins_nro=instance)
+    # pareto_true.merge( [i for i in pareto_m3as.solutions])
+
+    pareto_spea = spea_test(n=1, ins_nro=instance)
+    # pareto_true.merge([i for i in pareto_spea.solutions])
+
+    print('>>>>>>>>>>LenSoluciones')
+    print('ParetoTrue',len(pareto_true.solutions))
+    print('M3AS',len(pareto_m3as.solutions))
+    print('SPEA',len(pareto_spea.solutions))
+
+    sm1 += Metrics.m1(pareto_true, pareto_spea)
+    sm2 += Metrics.m2(pareto_spea, 1000)
+    sm3 += Metrics.m3(pareto_spea)
+    sm4 += Metrics.m4(pareto_true, pareto_spea)
+    mm1 += Metrics.m1(pareto_true, pareto_m3as)
+    mm2 += Metrics.m2(pareto_m3as, 1000)
+    mm3 += Metrics.m3(pareto_m3as)
+    mm4 += Metrics.m4(pareto_true, pareto_m3as)
 
 print('>>>>>>>>>>SPEA')
-print('Metrica m1:', Metrics.m1(pareto_true, pareto_spea))
-print('Metrica m2:', Metrics.m2(pareto_spea, 1000))
-print('Metrica m3:', Metrics.m3(pareto_spea))
-print('Metrica m4:', Metrics.m4(pareto_true, pareto_spea))
+print('Metrica m1:', sm1/5)
+print('Metrica m2:', sm2/5)
+print('Metrica m3:', sm3/5)
+print('Metrica m4:', sm4/5)
 
 print('>>>>>>>>>M3AS')
-print('Metrica m1:', Metrics.m1(pareto_true, pareto_m3as))
-print('Metrica m2:', Metrics.m2(pareto_m3as, 1000))
-print('Metrica m3:', Metrics.m3(pareto_m3as))
-print('Metrica m4:', Metrics.m4(pareto_true, pareto_m3as))
+print('Metrica m1:', mm1/5)
+print('Metrica m2:', mm2/5)
+print('Metrica m3:', mm3/5)
+print('Metrica m4:', mm4/5)
