@@ -12,7 +12,7 @@
 ## Pasos para correr el programa :
 
 ```
-python main.py
+python main.py 0
 ```
 
 
