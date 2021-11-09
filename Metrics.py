@@ -74,7 +74,7 @@ class Metrics:
     #     solutions = [[2,6],[3,4],[5,3],[6,2]]
 
         sumatorio = 0
-        print('M1'*4,len(solutions))
+        #print('M1'*4,len(solutions))
         for solution in solutions:
             sumatorio += min_dist(solution,optimoSolutions)
 

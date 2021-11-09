@@ -44,11 +44,13 @@ instance = int(sys.argv[1])
 pareto_true = ParetoSet([])
 
 pareto_m3as = m3as_test(n=5, ins_nro=instance)
-pareto_true.merge( [i for i in pareto_m3as.solutions])
+pareto_true.merge( [i for i in pareto_m3as.solutions] )
 
 pareto_spea = spea_test(n=5, ins_nro=instance)
-pareto_true.merge([i for i in pareto_spea.solutions])
 
+pareto_true.merge( [i for i in pareto_spea.solutions] )
+
+ 
 sm1 = 0
 sm2 = 0
 sm3 = 0
@@ -65,10 +67,7 @@ for i in range(5):
     pareto_spea = spea_test(n=1, ins_nro=instance)
     # pareto_true.merge([i for i in pareto_spea.solutions])
 
-    print('>>>>>>>>>>LenSoluciones')
-    print('ParetoTrue',len(pareto_true.solutions))
-    print('M3AS',len(pareto_m3as.solutions))
-    print('SPEA',len(pareto_spea.solutions))
+    
 
     sm1 += Metrics.m1(pareto_true, pareto_spea)
     sm2 += Metrics.m2(pareto_spea, 1000)

@@ -1,6 +1,6 @@
 from Pareto import Solution
 import sys
-import random
+import random, sys, math
 
 class GaSolution(Solution):
     """
@@ -15,7 +15,18 @@ class GaSolution(Solution):
         self.fitness = 999999999
         self.evaluation = self.get_eval_solution()
 
-
+    def solutions_distance(self, other):
+        """
+        Calcula la distancia Euclidiana entre dos individuos
+        
+        @param other: el otro individuo
+        """
+        me_objs = self.evaluation
+        other_objs = other.evaluation
+        dist = 0.0
+        for v1, v2 in zip(me_objs, other_objs):
+            dist += math.pow(v1-v2, 2)
+        return math.sqrt(dist)
 
 class GeneticOperators:
 

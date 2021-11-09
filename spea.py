@@ -6,6 +6,8 @@ from Instance import Instance, QAP_INSTANCES
 from random import randint,random
 from Evaluation import Evaluation
 from Metrics import Metrics
+from cluster import Cluster
+
 import random
 import sys
 
@@ -39,8 +41,10 @@ class SPEA:
 
             #print('after remove')
 
-            #if len(ps.solutions) > self.max_pareto_points:
-            #    self.reduce_pareto_set(ps)
+            if len(ps.solutions) > self.max_pareto_points:
+                self.reduce_pareto_set(ps)
+                ps.solutions=self.reduce_pareto_set(ps)
+                
             # print('ueoueoauaeouaeo')
             # print(len(P), P[0])
             self.fitness_assignment(ps, P)
@@ -49,6 +53,10 @@ class SPEA:
             #print('after selection')
             P = self.next_generation(mating_pool, len(P),ev)
             #print('after next generation')
+        
+        if len(ps.solutions) > self.max_pareto_points:
+                self.reduce_pareto_set(ps)
+
         return ps
 
     def fitness_assignment(self, pareto_set: ParetoSet, population: [GaSolution]):
@@ -120,6 +128,42 @@ class SPEA:
         # print(Q)
         return Q
 
+
+    def reduce_pareto_set(self, par_set):
+        """
+        Realiza el clustering
+        """
+        lista_cluster=[]
+        for solucion in par_set.solutions:
+            cluster = Cluster()
+            cluster.agregar_solucion(solucion)
+            lista_cluster.append(cluster)
+  
+        while len(lista_cluster) > self.max_pareto_points:
+            min_distancia = float('inf')
+            for i in range (0,len(lista_cluster)-1):
+                for j in range(i+1, len(lista_cluster)-1): 
+                    c = lista_cluster[i]
+                    distancia = c.calcular_distancia(lista_cluster[j])
+                    if distancia < min_distancia:
+                        min_distancia = distancia
+                        c1 = i
+                        c2 = j
+               
+            cluster = lista_cluster[c1].unir(lista_cluster[c2]) #retorna un nuevo cluster 
+            del lista_cluster[c1]
+            del lista_cluster[c2]
+
+            lista_cluster.append(cluster)
+        
+        par_set=[]
+        
+        for cluster in lista_cluster:
+            solucion = cluster.centroide()
+            par_set.append(solucion)
+            
+        
+        return par_set 
 def test_qap(n = 5, ins_nro = 0):
     total_ind = 10
     total_generations = 100
@@ -142,6 +186,8 @@ def test_qap(n = 5, ins_nro = 0):
     ev=Evaluation(instancias) #Genero mis funciones objetivos para esa instancia
     spea = SPEA(len( dist_mat ), op, max_pareto_size)
     num_loc = len(dist_mat)
+    
+    
     for i in range(n):
         pop = []
         for _ in range(total_ind):
@@ -155,6 +201,7 @@ def test_qap(n = 5, ins_nro = 0):
 
         #print(soluciones)
         pareto_set.merge(soluciones)
+        
 
     return pareto_set
 
